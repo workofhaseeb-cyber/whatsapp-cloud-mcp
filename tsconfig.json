@@ -11,7 +11,8 @@
     "outDir": "dist",
     "rootDir": ".",
     "forceConsistentCasingInFileNames": true,
-    "noUncheckedIndexedAccess": true
+    "noUncheckedIndexedAccess": true,
+    "types": ["node"]
   },
   "include": ["src", "test", "examples"]
 }
