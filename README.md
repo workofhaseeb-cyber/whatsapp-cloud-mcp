@@ -246,6 +246,10 @@ npm test           # vitest run
 
 Issues and PRs are welcome. Please run `npm run lint && npm run typecheck && npm test` before opening a PR, and keep changes focused and well-tested.
 
+## Pro version
+
+Need an AI auto-reply agent, conversation history and bulk campaigns? [whatsapp-cloud-mcp Pro](https://github.com/workofhaseeb-cyber) is available — [book a free call](https://cal.com/muhammad-haseeb-6xxunl/discovery-call).
+
 ## License
 
 [MIT](./LICENSE) © Haseeb Ur Rehman
