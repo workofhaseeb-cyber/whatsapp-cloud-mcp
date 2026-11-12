@@ -36,8 +36,10 @@ It is built to be correct about WhatsApp's rules (the 24-hour customer-service w
 ### Run with npx
 
 ```bash
-npx whatsapp-cloud-mcp
+npx -y whatsapp-cloud-mcp
 ```
+
+> The npm release is coming soon. Until then, run it straight from GitHub: `npx -y github:workofhaseeb-cyber/whatsapp-cloud-mcp` (it builds on install), and use those same args in the configs below.
 
 ### Claude Desktop
 
