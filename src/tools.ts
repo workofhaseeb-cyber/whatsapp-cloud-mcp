@@ -237,10 +237,14 @@ export function registerTools(server: McpServer, client: WhatsAppClient, config:
     {
       title: "Upload WhatsApp media",
       description:
-        "Upload a media file to WhatsApp and get back a media_id you can reuse in send_media_message. Provide exactly one of file_path (a local file) or url (a remote file to fetch). The MIME type is inferred from the file extension when not given. Max 100MB.",
+        "Upload a media file to WhatsApp and get back a media_id you can reuse in send_media_message. Provide exactly one of file_path (a local file) or url (a remote file to fetch). file_path only works when the server is configured with WHATSAPP_UPLOAD_DIR and the file lives inside it; url must be a public https:// URL. The MIME type is inferred from the file extension when not given. Max 100MB.",
       inputSchema: {
-        file_path: z.string().min(1).optional().describe("Absolute path to a local file to upload"),
-        url: z.string().url().optional().describe("Remote URL to fetch and upload"),
+        file_path: z
+          .string()
+          .min(1)
+          .optional()
+          .describe("Path to a local file inside WHATSAPP_UPLOAD_DIR to upload (disabled if that env is unset)"),
+        url: z.string().url().optional().describe("Public https:// URL to fetch and upload"),
         mime_type: z.string().min(1).optional().describe("MIME type, e.g. image/jpeg (inferred if omitted)"),
       },
       annotations: { ...openWorld },

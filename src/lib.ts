@@ -49,6 +49,8 @@ export {
 export {
   WhatsAppClient,
   inferMime,
+  assertUploadPathAllowed,
+  assertUploadUrlAllowed,
   type FetchLike,
   type DryRunResult,
   type UploadMediaInput,

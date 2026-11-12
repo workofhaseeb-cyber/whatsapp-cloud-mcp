@@ -13,6 +13,13 @@ export interface WhatsAppConfig {
   dryRun: boolean;
   defaultCountryCode?: string;
   timeoutMs: number;
+  /**
+   * Directory that local files must live inside to be uploadable via
+   * `upload_media`'s `file_path`. When unset, `file_path` uploads are disabled
+   * (only `url` uploads are allowed). Guards against an LLM reading arbitrary
+   * local files.
+   */
+  uploadDir?: string;
 }
 
 const TRUTHY = new Set(["1", "true", "yes", "on"]);
@@ -37,5 +44,6 @@ export function loadConfig(env: NodeJS.ProcessEnv = process.env): WhatsAppConfig
     dryRun: isTruthy(env.WHATSAPP_DRY_RUN),
     defaultCountryCode: cc,
     timeoutMs: Number.isFinite(timeout) && timeout > 0 ? timeout : 15000,
+    uploadDir: env.WHATSAPP_UPLOAD_DIR?.trim() || undefined,
   };
 }

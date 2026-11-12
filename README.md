@@ -126,6 +126,7 @@ In [Meta for Developers](https://developers.facebook.com/):
 | `WHATSAPP_API_VERSION` | no | `v27.0` | Graph API version |
 | `WHATSAPP_DEFAULT_COUNTRY_CODE` | no | — | Country code for national numbers (e.g. `971`) |
 | `WHATSAPP_DRY_RUN` | no | `0` | `1`/`true` to preview requests without sending |
+| `WHATSAPP_UPLOAD_DIR` | no | — | Directory whose files `upload_media`'s `file_path` may read; unset disables local-file uploads |
 | `WHATSAPP_TIMEOUT_MS` | no | `15000` | Per-request timeout in ms |
 | `WHATSAPP_GRAPH_BASE_URL` | no | `https://graph.facebook.com` | Graph base URL (override for proxies/mocks) |
 | `WHATSAPP_APP_SECRET` | webhook | — | App secret for webhook signature verification |
@@ -215,6 +216,7 @@ console.log(res);
 - **Never commit `.env`** or tokens. Pass secrets via environment variables (`.env` is git-ignored).
 - **Least privilege**: prefer a long-lived **System User** token scoped to only `whatsapp_business_messaging` (and `whatsapp_business_management` for templates).
 - **Use dry-run** (`WHATSAPP_DRY_RUN=1`) when developing or letting an untrusted prompt drive the tools — nothing is sent and tokens are redacted in output.
+- **Sandboxed uploads**: `upload_media` can only read local files inside `WHATSAPP_UPLOAD_DIR` (symlinks and `..` are resolved first) and is disabled when that variable is unset. Remote uploads must be `https://`, private/loopback/link-local IP hosts are refused and redirects are not followed, which limits SSRF. Hostnames that resolve to private IPs are not checked, so run the server where that matters.
 - **Verify webhook signatures** with `verifyWebhookSignature` over the *raw* request body (constant-time compare) before trusting any payload.
 - **Respect the rules**: free-form messages are only allowed within the 24-hour customer-service window; outside it you must use an approved template. Obtain opt-in and follow the [WhatsApp Business Messaging Policy](https://business.whatsapp.com/policy).
 

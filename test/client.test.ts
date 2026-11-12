@@ -1,5 +1,8 @@
-import { describe, it, expect, vi } from "vitest";
-import { WhatsAppClient } from "../src/client.js";
+import { describe, it, expect, vi, beforeAll, afterAll } from "vitest";
+import { mkdtemp, rm, symlink, writeFile } from "node:fs/promises";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
+import { WhatsAppClient, assertUploadPathAllowed, assertUploadUrlAllowed } from "../src/client.js";
 import { WhatsAppApiError, ConfigError } from "../src/errors.js";
 import type { WhatsAppConfig } from "../src/config.js";
 
@@ -44,12 +47,58 @@ describe("dry-run", () => {
     expect(res.url).toContain("<PHONE_NUMBER_ID>");
   });
 
-  it("describes an upload without reading the file", async () => {
+  it("describes a url upload without downloading it", async () => {
     const fetchMock = vi.fn();
     const client = new WhatsAppClient(config({ dryRun: true }), { fetch: fetchMock as unknown as typeof fetch });
-    const res = (await client.uploadMedia({ filePath: "/no/such/file.png" })) as { body: { type: string } };
+    const res = (await client.uploadMedia({ url: "https://example.com/menu.png" })) as { body: { type: string } };
     expect(fetchMock).not.toHaveBeenCalled();
     expect(res.body.type).toBe("image/png");
+  });
+});
+
+describe("upload guards", () => {
+  let dir: string;
+  beforeAll(async () => {
+    dir = await mkdtemp(join(tmpdir(), "wa-upload-"));
+    await writeFile(join(dir, "ok.png"), "x");
+  });
+  afterAll(async () => {
+    await rm(dir, { recursive: true, force: true });
+  });
+
+  it("disables file_path uploads when WHATSAPP_UPLOAD_DIR is unset", async () => {
+    await expect(assertUploadPathAllowed("/etc/passwd", undefined)).rejects.toBeInstanceOf(ConfigError);
+  });
+
+  it("allows files inside the upload dir", async () => {
+    await expect(assertUploadPathAllowed(join(dir, "ok.png"), dir)).resolves.toMatch(/ok\.png$/);
+  });
+
+  it("rejects traversal outside the upload dir", async () => {
+    await expect(assertUploadPathAllowed(join(dir, "..", "..", "etc", "hosts"), dir)).rejects.toThrow(/outside|not found/);
+  });
+
+  it("rejects symlinks that escape the upload dir", async () => {
+    await symlink("/etc/hosts", join(dir, "escape.png"));
+    await expect(assertUploadPathAllowed(join(dir, "escape.png"), dir)).rejects.toThrow(/outside/);
+  });
+
+  it.each([
+    "http://example.com/a.png",
+    "https://localhost/a.png",
+    "https://127.0.0.1/a.png",
+    "https://10.0.0.5/a.png",
+    "https://172.20.1.1/a.png",
+    "https://192.168.1.1/a.png",
+    "https://169.254.169.254/latest/meta-data",
+    "https://[::1]/a.png",
+    "https://[fd00::1]/a.png",
+  ])("rejects unsafe url %s", (u) => {
+    expect(() => assertUploadUrlAllowed(u)).toThrow(ConfigError);
+  });
+
+  it("accepts a public https url", () => {
+    expect(assertUploadUrlAllowed("https://cdn.example.com/a.png").hostname).toBe("cdn.example.com");
   });
 });
 
