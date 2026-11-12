@@ -248,7 +248,7 @@ Issues and PRs are welcome. Please run `npm run lint && npm run typecheck && npm
 
 ## Pro version
 
-Need an AI auto-reply agent, conversation history and bulk campaigns? [whatsapp-cloud-mcp Pro](https://github.com/workofhaseeb-cyber) is available — [book a free call](https://cal.com/muhammad-haseeb-6xxunl/discovery-call).
+Need an AI auto-reply agent, conversation history and bulk campaigns? [whatsapp-cloud-mcp Pro](https://github.com/workofhaseeb-cyber) is available for a **launch price of AED 399** (one-time, self-install). [Buy with Ziina](https://pay.ziina.com/Haseeb216/kzSiCAXGR?source=app), then send your GitHub username to workofhaseeb@gmail.com to get access, or [book a free call](https://cal.com/muhammad-haseeb-6xxunl/discovery-call) first.
 
 ## License
 
