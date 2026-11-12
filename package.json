@@ -1,0 +1,66 @@
+{
+  "name": "whatsapp-cloud-mcp",
+  "version": "0.1.0",
+  "description": "Model Context Protocol (MCP) server for the official WhatsApp Cloud API — let Claude, Cursor and any AI agent send WhatsApp messages, templates, media and buttons.",
+  "type": "module",
+  "bin": {
+    "whatsapp-cloud-mcp": "dist/index.js"
+  },
+  "main": "dist/lib.js",
+  "types": "dist/lib.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/lib.d.ts",
+      "import": "./dist/lib.js"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "dev": "tsc -p tsconfig.build.json --watch",
+    "start": "node dist/index.js",
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "prepublishOnly": "npm run lint && npm run build && npm test"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "whatsapp",
+    "whatsapp-cloud-api",
+    "ai-agents",
+    "claude",
+    "llm",
+    "typescript"
+  ],
+  "author": "Haseeb Ur Rehman (https://www.lifeofhaseeb.com)",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/workofhaseeb-cyber/whatsapp-cloud-mcp.git"
+  },
+  "homepage": "https://github.com/workofhaseeb-cyber/whatsapp-cloud-mcp#readme",
+  "bugs": {
+    "url": "https://github.com/workofhaseeb-cyber/whatsapp-cloud-mcp/issues"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.32.2",
+    "zod": "^4.6.7"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@types/node": "^26.6.6",
+    "eslint": "^10.14.0",
+    "typescript": "^6.0.3",
+    "typescript-eslint": "^8.72.2",
+    "vitest": "^5.1.0"
+  }
+}
